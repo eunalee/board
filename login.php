@@ -2,17 +2,17 @@
 require_once './dbConnection.php';
 
 $id = $_POST['id'];
-$password = md5($_POST['password']);
+$password = $_POST['password'];
 $url = $_POST['url'];
 
 $conn = dbConnect('dbMember');
-$query = "SELECT * FROM tMember WHERE sId='$id' and sPassword='$password'";
+$query = "SELECT * FROM tMember WHERE sId='$id'";
 
 $result = mysqli_query($conn, $query);
 $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
 session_start();
-if(!empty($row)) {		// 로그인 성공
+if(password_verify($password, $row['sPassword'])) {		// 로그인 성공
 	// 세션 생성
 	$_SESSION['memberSeq'] = $row['nMemberSeq'];
 	$_SESSION['id'] = $row['sId'];
