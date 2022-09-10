@@ -6,17 +6,18 @@
 		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 		<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+		<script src="/board/js/signup.js"></script>
 	</head>
 	<body>
 		<script>
-			$(document).ready(function() {
+			/*$(document).ready(function() {
 				$('input').focusout(function() {
 					formValidate($(this));
 				});
 			});
 
 			// 폼 검증
-			let formValidate = (obj) => {
+			const formValidate = (obj) => {
 				obj.removeClass('is-valid');
 				obj.parent().find('.invalid-feedback').text('');
 
@@ -51,7 +52,7 @@
 				}
 			};
 
-			let checkForm = (id, value) => {
+			const checkForm = (id, value) => {
 				let message = '';
 
 				if(id === 'id') {
@@ -103,13 +104,13 @@
 					else if(!/[a-zA-Z가-힣]/.test(value)) {
 						message = '이름은 한글, 또는 영문만 입력할 수 있습니다.';
 					}
-					/*else if(!/[가-힣]{1,8}/.test(value) || !/[a-zA-Z]{1,16}/.test(value)) {
+					else if(!/[가-힣]{1,8}/.test(value) || !/[a-zA-Z]{1,16}/.test(value)) {
 						message = '한글 8자, 영문 16자까지 가능합니다.';
-					}*/
+					}
 				}
 
 				return message;
-			};
+			};*/
 		</script>
 		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 			<div class="container-fluid">
@@ -117,7 +118,7 @@
 			</div>
 		</nav>
 		<body>
-			<form class="row g-3" method="post" action="/board/signup.php">
+			<form class="row g-3" method="post" action="/board/signup.php" id="signupForm">
 				<div class="mb-3">
 					<label for="formGroupExampleInput" class="form-label">아이디</label>
 					<input type="text" class="form-control" id="id" name="id" placeholder="영문 4자 이상, 최대 20자">
@@ -139,7 +140,7 @@
 					<div class="invalid-feedback"></div>
 				</div>
 				<div class="mb-3">
-					<button type="submit" class="btn btn-primary" id="joinBtn" disabled>회원가입</button>
+					<button type="button" class="btn btn-primary" id="joinBtn" onclick="formValidate()" disabled>회원가입</button>
 				</div>
 			</form>
 		</body>
