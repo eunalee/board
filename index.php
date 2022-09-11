@@ -36,23 +36,42 @@
 			</div>
 		</nav>
 		<body>
-			<table border="1">
-				<tr>
-					<th>No</th>
-					<th>제목</th>
-					<th>작성자</th>
-					<th>작성일</th>
-					<th>조회</th>
-				</tr>
-				<tr>
-					<td>1</td>
-					<td><a href="">ㅋㅋㅋㅋ</a></td>
-					<td>admin</td>
-					<td>2022.09.03</td>
-					<td>1</td>
-				</tr>
-			</table>
-			<a href="/board/writeListForm.php">글쓰기</a>
+			<ul class="list-group">
+				<li class="list-group-item d-flex justify-content-between align-items-start">
+					<div class="ms-2 me-auto">
+						<div class="fw-bold">ㅋㅋㅋㅋ</div>
+						admin | 2022.09.03
+					</div>
+					<span class="badge bg-primary rounded-pill">14</span>
+				</li>
+				<li class="list-group-item d-flex justify-content-between align-items-start">
+					<div class="ms-2 me-auto">
+						<div class="fw-bold">ㅋㅋㅋㅋ</div>
+						admin | 2022.09.03
+					</div>
+					<span class="badge bg-primary rounded-pill">14</span>
+				</li>
+				<li class="list-group-item d-flex justify-content-between align-items-start">
+					<div class="ms-2 me-auto">
+						<div class="fw-bold">ㅋㅋㅋㅋ</div>
+						admin | 2022.09.03
+					</div>
+					<span class="badge bg-primary rounded-pill">14</span>
+				</li>
+			</ul>
+			<nav aria-label="Page navigation example">
+				<ul class="pagination">
+					<li class="page-item">
+						<a class="page-link" href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+					</li>
+					<li class="page-item"><a class="page-link" href="#">1</a></li>
+					<li class="page-item"><a class="page-link" href="#">2</a></li>
+					<li class="page-item"><a class="page-link" href="#">3</a></li>
+					<li class="page-item">
+					<a class="page-link" href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+				</ul>
+			</nav>
+			<a class="btn btn-primary" href="/board/writeListForm.php" role="button">글쓰기</a>
 		</body>
 		<footer></footer>
 	</body>

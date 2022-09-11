@@ -7,7 +7,6 @@ $url = $_POST['url'];
 
 $conn = dbConnect('dbMember');
 $query = "SELECT * FROM tMember WHERE sId='$id'";
-
 $result = mysqli_query($conn, $query);
 $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
 
