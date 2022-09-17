@@ -5,6 +5,7 @@ if(!isset($_SESSION['memberSeq'])) :
 	echo "<script>location.href='$url';</script>";
 else :
 	$id = $_SESSION['id'];
+	$memberSeq = $_SESSION['memberSeq'];
 endif;
 ?>
 
@@ -18,6 +19,42 @@ endif;
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 	</head>
 	<body>
+		<script>
+			window.onload = () => {
+				const button = document.getElementById('insertBtn');
+				button.addEventListener('click', (event) => {
+					formCheck();
+				});
+			}
+
+			/**
+			 * 폼 검증
+			 */
+			const formCheck = () => {
+				const title = document.getElementById('title');
+				if(title.value.trim() === '') {
+					alert('제목을 입력해 주세요.');
+					title.focus();
+					return false;
+				}
+
+				if(title.value.length >= 100) {
+					alert('제목은 최대 100자 까지 작성할 수 있습니다.');
+					title.focus();
+					return false;
+				}
+
+				const content = document.getElementById('content');
+				if(content.value.trim() === '') {
+					alert('내용을 입력해 주세요.');
+					content.focus();
+					return false;
+				}
+
+				const form = document.getElementById('writeListForm');
+				form.submit();
+			};
+		</script>
 		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 			<div class="container-fluid">
 				<a class="navbar-brand" href="/board/index.php">BOARD</a>
@@ -30,19 +67,19 @@ endif;
 			</div>
 		</nav>
 		<body>
-			<form class="row g-3" method="post" action="">
+			<form class="row g-3" method="post" action="/board/writeList.php" id="writeListForm">
 				<div class="mb-3">
 					<label for="formGroupExampleInput" class="form-label">제목</label>
-					<input type="text" class="form-control" name="title" placeholder="제목을 입력해주세요.">
+					<input type="text" class="form-control" id="title" name="title" placeholder="제목을 입력해주세요.">
 				</div>
 				<div class="mb-3">
 					<label for="formGroupExampleInput" class="form-label">내용</label>
-					<textarea class="form-control is-invalid" id="validationTextarea" placeholder="내용을 입력해주세요." required></textarea>
-					<div class="invalid-feedback">Please enter a message in the textarea.</div>
+					<textarea class="form-control" id="content" name="content" placeholder="내용을 입력해주세요."></textarea>
 				</div>
+				<input type="hidden" id="memberSeq" name="memberSeq" value="<?php echo isset($memberSeq) ? $memberSeq : 0; ?>">
 				<div class="mb-3">
 					<button type="reset" class="btn btn-primary">취소</button>
-					<button type="submit" class="btn btn-primary">등록</button>
+					<button type="button" class="btn btn-primary" id="insertBtn">등록</button>
 				</div>
 			</form>
 		</body>
