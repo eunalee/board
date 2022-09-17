@@ -1,4 +1,8 @@
-<?php session_start(); ?>
+<?php
+require_once './dbConnection.php';
+
+session_start();
+?>
 <!DOCTYPE html>
 <html>
 	<head>
@@ -35,44 +39,74 @@
 				<?php endif; ?>
 			</div>
 		</nav>
-		<body>
-			<ul class="list-group">
-				<li class="list-group-item d-flex justify-content-between align-items-start">
-					<div class="ms-2 me-auto">
-						<div class="fw-bold">ㅋㅋㅋㅋ</div>
-						admin | 2022.09.03
-					</div>
-					<span class="badge bg-primary rounded-pill">14</span>
-				</li>
-				<li class="list-group-item d-flex justify-content-between align-items-start">
-					<div class="ms-2 me-auto">
-						<div class="fw-bold">ㅋㅋㅋㅋ</div>
-						admin | 2022.09.03
-					</div>
-					<span class="badge bg-primary rounded-pill">14</span>
-				</li>
-				<li class="list-group-item d-flex justify-content-between align-items-start">
-					<div class="ms-2 me-auto">
-						<div class="fw-bold">ㅋㅋㅋㅋ</div>
-						admin | 2022.09.03
-					</div>
-					<span class="badge bg-primary rounded-pill">14</span>
-				</li>
+		<?php 
+			$conn = dbConnect('dbBoard');
+
+			/**
+			 * 페이징
+			 */
+			$pagePerList = 5;									// 한 페이지당 게시글 수
+			$blockPerPage = 2;									// 한 블럭당 페이지 수
+			$page = isset($_GET['page']) ? $_GET['page'] : 1;	// 현재 페이지
+
+			// 게시글 전체 갯수 조회
+			$query = 'SELECT COUNT(*) AS total FROM tBoardList';
+			$result = mysqli_query($conn, $query);
+			$row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+			$totalCount = $row['total'];
+
+			$totalPage = ceil($totalCount/$pagePerList);		// 전체 페이지 수
+			$totalBlcok = ceil($totalPage/$blockPerPage);		// 전체 블럭 수
+			$block = ceil($page/$blockPerPage);					// 현재 블럭
+			$startPage = ($block - 1) * $blockPerPage + 1;		// 블럭당 시작 페이지 
+			if($startPage <= 0) {
+				$startPage = 1;
+			}
+			$endPage = $block*$blockPerPage;					// 블럭당 마지막 페이지
+			if($endPage > $totalPage) {
+				$endPage = $totalPage;
+			}
+
+			$prevBlock = $block - 1;							// 이전 블럭
+			$prevBlockPage = $prevBlock * $blockPerPage;		// 이전 블럭 페이지
+
+			$nextBlock = $block + 1;								// 다음 블럭
+			$nextBlockPage = ($nextBlock - 1) * $blockPerPage + 1;	// 다음 블럭 페이지 
+
+
+			// 게시글 조회
+			$offset = ($page - 1) * $pagePerList;
+			$query = "SELECT tb.nListSeq, tb.sTitle, tb.sContent, tb.dtCreateDate, tb.emDisplayYN, tb.nHit, tm.sId FROM tBoardList tb LEFT OUTER JOIN dbMember.tMember tm ON tb.nMemberSeq=tm.nMemberSeq WHERE tb.emDisplayYN='Y' ORDER BY nListSeq DESC limit $offset, $pagePerList";
+			$result = mysqli_query($conn, $query);
+
+		?>
+		<ul class="list-group">
+			<?php while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) : ?>
+			<li class="list-group-item d-flex justify-content-between align-items-start">
+				<div class="ms-2 me-auto">
+					<div class="fw-bold"><?php echo $row['sTitle']; ?></div>
+					<?php echo $row['sId']; ?> | <?php echo date('Y.m.d.', strtotime($row['dtCreateDate'])); ?>
+				</div>
+				<span class="badge bg-primary rounded-pill"> <?php echo $row['nHit']; ?></span>
+			</li>
+			<?php endwhile; ?>
+		</ul>
+		<nav aria-label="Page navigation example">
+			<ul class="pagination">
+				<?php if($prevBlock > 0) : ?>
+				<li class="page-item"><a class="page-link" href="/board/index.php?page=<?php echo $prevBlockPage; ?>" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+				<?php endif; ?>
+
+				<?php for($i=$startPage; $i<=$endPage; $i++) : ?>
+				<li class="page-item<?php echo ($i == $page) ? ' active' : ''; ?>"><a class="page-link" href="/board/index.php?page=<?php echo $i; ?>"><?php echo $i; ?></a></li>
+				<?php endfor; ?>
+
+				<?php if($nextBlock <= $totalBlcok) : ?>
+				<li class="page-item"><a class="page-link" href="/board/index.php?page=<?php echo $nextBlockPage; ?>" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+				<?php endif; ?>
 			</ul>
-			<nav aria-label="Page navigation example">
-				<ul class="pagination">
-					<li class="page-item">
-						<a class="page-link" href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
-					</li>
-					<li class="page-item"><a class="page-link" href="#">1</a></li>
-					<li class="page-item"><a class="page-link" href="#">2</a></li>
-					<li class="page-item"><a class="page-link" href="#">3</a></li>
-					<li class="page-item">
-					<a class="page-link" href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
-				</ul>
-			</nav>
-			<a class="btn btn-primary" href="/board/writeListForm.php" role="button">글쓰기</a>
-		</body>
+		</nav>
+		<a class="btn btn-primary" href="/board/writeListForm.php" role="button">글쓰기</a>
 		<footer></footer>
 	</body>
 </html>
