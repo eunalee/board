@@ -45,6 +45,7 @@ endif;
 				}
 
 				const content = document.getElementById('content');
+				content.value = content.value.replace(/(?:\r\n|\r|\n)/g, '<br>')
 				if(content.value.trim() === '') {
 					alert('내용을 입력해 주세요.');
 					content.focus();
