@@ -13,6 +13,11 @@ session_start();
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 	</head>
 	<body>
+		<script>
+			const view = (listSeq, page) => {
+				location.href = `/board/viewList.php?listSeq=${listSeq}&page=${page}`;
+			};
+		</script>
 		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 			<div class="container-fluid">
 				<a class="navbar-brand" href="/board/index.php">BOARD</a>
@@ -78,16 +83,15 @@ session_start();
 			$offset = ($page - 1) * $pagePerList;
 			$query = "SELECT tb.nListSeq, tb.sTitle, tb.sContent, tb.dtCreateDate, tb.emDisplayYN, tb.nHit, tm.sId FROM tBoardList tb LEFT OUTER JOIN dbMember.tMember tm ON tb.nMemberSeq=tm.nMemberSeq WHERE tb.emDisplayYN='Y' ORDER BY nListSeq DESC limit $offset, $pagePerList";
 			$result = mysqli_query($conn, $query);
-
 		?>
 		<ul class="list-group">
 			<?php while($row = mysqli_fetch_array($result, MYSQLI_ASSOC)) : ?>
-			<li class="list-group-item d-flex justify-content-between align-items-start">
+			<li class="list-group-item list-group-item-action d-flex justify-content-between align-items-start" onclick="view(<?php echo $row['nListSeq']; ?>, <?php echo $page; ?>)">
 				<div class="ms-2 me-auto">
 					<div class="fw-bold"><?php echo $row['sTitle']; ?></div>
 					<?php echo $row['sId']; ?> | <?php echo date('Y.m.d.', strtotime($row['dtCreateDate'])); ?>
 				</div>
-				<span class="badge bg-primary rounded-pill"> <?php echo $row['nHit']; ?></span>
+				<span class="badge bg-primary rounded-pill"><?php echo $row['nHit']; ?></span>
 			</li>
 			<?php endwhile; ?>
 		</ul>
